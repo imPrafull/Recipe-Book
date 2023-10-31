@@ -1,0 +1,48 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+
+    .logo {
+        width: min(60%, 12.5rem);
+        margin-bottom: 32px;
+
+        img {
+            width: 100%;
+        }
+    }
+
+    form {
+        width: 80%;
+        max-width: 22.5rem;
+
+        .form-input {
+            margin-bottom: 20px;
+        }
+
+        .actions {
+            margin-top: 12px;
+
+            .sign-up {
+                margin-block: 20px;
+                text-align: center;
+
+                a {
+                    font-weight: 600;
+                }
+
+                @media only screen and (max-width: 306px) {
+                    font-size: .9rem;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .container {
+        padding-bottom: 12vh;
+    }
+}

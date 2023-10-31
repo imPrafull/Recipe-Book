@@ -1,0 +1,43 @@
+@keyframes spinner {
+  0% { transform: translate(-50%,-50%) rotate(0deg); }
+  100% { transform: translate(-50%,-50%) rotate(360deg); }
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255,255,255,0.5)
+}
+.spinner div {
+  position: absolute;
+  width: 3rem;
+  height: 3rem;
+  border: .5rem solid var(--primary);
+  border-top-color: transparent;
+  border-radius: 50%;
+}
+.spinner div {
+  animation: spinner 1s linear infinite;
+  top: 2rem;
+  left: 2rem;
+}
+.loadingio-spinner-rolling {
+  width: 4rem;
+  height: 4rem;
+  display: inline-block;
+  overflow: hidden;
+  background: transparent;
+}
+.spinner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform: translateZ(0) scale(1);
+  backface-visibility: hidden;
+  transform-origin: 0 0; /* see note above */
+}
+.spinner div { box-sizing: content-box; }

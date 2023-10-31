@@ -6,21 +6,27 @@ import { Observable, Subscription } from 'rxjs';
 import { AuthService, AuthResponseData } from './auth.service';
 import { AlertComponent } from '../shared/alert/alert.component';
 import { PlaceholderDirective } from '../shared/placeholder/placeholder.directive';
+import { LoaderService } from '../shared/loading-spinner/loader.service';
 
 @Component({
   selector: 'app-auth',
-  templateUrl: './auth.component.html'
+  templateUrl: './auth.component.html',
+  styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent implements OnDestroy {
 
   isLoginMode = true;
-  isLoading = false;
   error: string;
   @ViewChild(PlaceholderDirective, {static: false}) alertHost: PlaceholderDirective;
 
   private closeSub: Subscription;
 
-  constructor(private authService: AuthService, private router: Router, private componentFactoryResolver: ComponentFactoryResolver) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private loaderService: LoaderService,
+  ) { }
 
   onSubmit(form: NgForm) {
     if (!form.valid) {
@@ -30,7 +36,7 @@ export class AuthComponent implements OnDestroy {
     const password = form.value.password;
     let authObs: Observable<AuthResponseData>;
 
-    this.isLoading = true;
+    this.loaderService.isLoading = true;
     if (this.isLoginMode) {
       authObs = this.authService.login(email, password);
     }
@@ -41,14 +47,14 @@ export class AuthComponent implements OnDestroy {
     authObs.subscribe(
       resData => {
         console.log(resData);
-        this.isLoading = false;
+        this.loaderService.isLoading = false;
         this.router.navigate(['/recipes']);
       },
       errorMessage => {
         console.log(errorMessage);
         this.error = errorMessage;
         this.showErrorAlert(errorMessage);
-        this.isLoading = false;
+        this.loaderService.isLoading = false;
       }
     );
     form.reset();
