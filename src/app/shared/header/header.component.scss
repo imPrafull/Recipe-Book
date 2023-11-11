@@ -1,0 +1,11 @@
+.container {
+    background-color: var(--item-background);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .87rem 1rem;
+    box-shadow: 0px 4px 4px -2px rgba(0,0,0,0.25);
+    -webkit-box-shadow: 0px 4px 4px -2px rgba(0,0,0,0.25);
+    -moz-box-shadow: 0px 4px 4px -2px rgba(0,0,0,0.25);
+    position: relative;
+}

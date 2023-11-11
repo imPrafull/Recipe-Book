@@ -8,6 +8,8 @@
     --primary: #FD5612;
     --primary-contrast: #FFFDFC;
     --primary-light: #FFA972;
+    --primary-dark: #461D04;
+    --primary-dark-rgb: 70,29,4;
     --primary-bg: #FFF5ED;
     --primary-bg-light: #FFF8F3;
     --border: #DCDCDC;
@@ -50,6 +52,11 @@ h4 {
 
 h5 {
     font-size: 1.125rem;
+    font-weight: 600;
+}
+
+h6 {
+    font-weight: 600;
 }
 
 h6, p {
@@ -89,6 +96,19 @@ input {
     padding: .9rem 12px;
     font-weight: 600;
     border-radius: .5rem;
+}
+
+.btn-icon {
+    background: transparent;
+}
+
+.page-container {
+    height: 100%;
+    background-color: var(--background);
+
+    &.with-header {
+        height: calc(100% - 3.49rem);
+    }
 }
 
 @media screen and (min-width: 768px) {

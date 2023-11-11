@@ -1,8 +1,18 @@
-<div class="row">
-    <div class="col-md-5">
+<app-header title="Recipe Book" [centeredTitle]="true">
+    <div class="end">
+        <button class="btn-icon">
+            <img src="assets/icons/shopping-cart.svg" />
+        </button>
+        <button class="btn-icon" (click)="onLogout()">
+            <img src="assets/icons/logout.svg" />
+        </button>
+    </div>
+</app-header>
+<div class="page-container with-header">
+    <div class="recipe-list">
         <app-recipe-list></app-recipe-list>
     </div>
-    <div class="col-md-7">
+    <div class="recipe-detail" *ngIf="false">
         <router-outlet></router-outlet>
     </div>
 </div>
