@@ -5,9 +5,9 @@
     margin-bottom: 1rem;
     border-radius: 8px;
     padding: .625rem .5rem;
-    box-shadow: 0px 1px 3px 0px rgba(var(--primary-dark-rgb),0.15);
-    -webkit-box-shadow: 0px 1px 3px 0px rgba(var(--primary-dark-rgb),0.15);
-    -moz-box-shadow: 0px 1px 3px 0px rgba(var(--primary-dark-rgb),0.15);
+    box-shadow: var(--shadow);
+    -webkit-box-shadow: var(--shadow);
+    -moz-box-shadow: var(--shadow);
 
     .item-image {
         aspect-ratio: 5 / 4;
