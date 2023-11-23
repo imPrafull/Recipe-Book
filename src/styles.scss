@@ -5,7 +5,9 @@
     --text: #1A0B00;
     --text-rgb: 26,11,0;
     --background: #FFFDFC;
+    
     --item-background: #FFFFFF;
+
     --primary: #FD5612;
     --primary-contrast: #FFFDFC;
     --primary-light: #FFA972;
@@ -13,9 +15,12 @@
     --primary-dark-rgb: 70,29,4;
     --primary-bg: #FFF5ED;
     --primary-bg-light: #FFF8F3;
+
     --danger: #FA2314;
+
     --border: #DCDCDC;
     --border-light: #F0F0F0;
+
     --shadow: 0px 1px 3px 0px rgba(var(--primary-dark-rgb),0.15);
 }
 
@@ -75,36 +80,52 @@ button {
     -webkit-tap-highlight-color: transparent;
 }
 
-input {
-    box-shadow: 0 0 0 30px var(--background) inset !important;
-    -webkit-box-shadow: 0 0 0 30px var(--background) inset !important;
+input, textarea {
+    box-shadow: 0 0 0 30px var(--item-background) inset !important;
+    -webkit-box-shadow: 0 0 0 30px var(--item-background) inset !important;
     outline: none;
     font-size: 1rem;
 }
 
-.form-input input {
-    border: 1px solid var(--border);
-    width: 100%;
-    border-radius: .5rem;
-    background-color: var(--background);
-    padding: .8rem 12px;
-
-    &:focus {
-        border: 1px solid var(--primary-light);
+.form-input {
+    input, textarea {
+        border: 1px solid var(--border);
+        width: 100%;
+        border-radius: .5rem;
+        background-color: var(--item-background);
+        padding: .8rem .75rem;
+    
+        &:focus {
+            border: 1px solid var(--primary-light);
+        }
     }
-}
+
+    textarea {
+        resize: none;
+    }
+} 
 
 .btn-primary {
     background-color: var(--primary);
     color: var(--primary-contrast);
     width: 100%;
-    padding: .9rem 12px;
+    padding: .9rem .75rem;
     font-weight: 600;
     border-radius: .5rem;
+
+    &.outline {
+        background: var(--background);
+        color: var(--primary);
+        border: 1px solid var(--primary);
+    }
 }
+
 
 .btn-icon {
     background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .page-container {
@@ -113,6 +134,27 @@ input {
 
     &.with-header {
         height: calc(100% - 3.49rem);
+    }
+}
+
+app-header {
+    .end, .start {
+        display: flex;
+        align-items: center;
+    
+        .btn-icon {
+            height: 1.5rem;
+            width: 1.5rem;
+        }
+    }
+
+    .end .btn-icon {
+        margin-left: 1rem;
+    }
+
+    .start {
+        position: relative;
+        z-index: 2;
     }
 }
 

@@ -1,4 +1,52 @@
-<div class="row">
+<app-header title="Shopping List" [centeredTitle]="true">
+  <div class="start">
+    <button class="btn-icon" (click)="back()">
+      <img src="assets/icons/arrow-left.svg" />
+    </button>
+  </div>
+</app-header>
+<div class="page-container with-header">
+  <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
+    <div class="form-input">
+      <input type="text" id="name" formControlName="name" />
+    </div>
+
+    <div class="form-input">
+      <input type="text" id="imagePath" formControlName="imagePath" #imagePath />
+    </div>
+
+    <div class="recipe-img">
+      <img [src]="imagePath.value" class="img-responsive" >
+    </div>
+
+    <div class="form-input">
+      <textarea type="text" id="description" rows="6" formControlName="description"></textarea>
+    </div>
+
+    <div class="ingredients" formArrayName="ingredients">
+      <div class="header">
+        <h4>Ingredients</h4>
+        <button type="button" class="btn-primary outline" (click)="onAddIngredient()">Add</button>
+      </div>
+      <div class="ingredient" *ngFor="let ingredientCtrl of controls; let i = index" [formGroupName]="i">
+        <div class="form-input">
+          <input type="text" class="form-control" formControlName="name" >
+        </div>
+        <div class="form-input amount">
+          <input type="number" class="form-control" formControlName="amount" >
+        </div>
+        <button type="button" class="btn-icon" (click)="onDeleteIngredient(i)" >
+          <img src="assets/icons/trash-outline.svg" />
+        </button>
+      </div>
+    </div>
+    <div class="actions">
+      <button type="submit" class="btn-primary" [disabled]="!recipeForm.valid">Save</button>
+    </div>
+  </form>
+</div>
+
+<!-- <div class="row">
   <div class="col-xs-12">
     <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()" >
       <div class="row">
@@ -59,4 +107,4 @@
       </div>
     </form>
   </div>
-</div>
+</div> -->

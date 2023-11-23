@@ -1,6 +1,5 @@
 <div class="container">
-  <h4 class="title">{{ title }}</h4>
-  <div class="buttons">
-    <ng-content select=".end"></ng-content>
-  </div>
+  <ng-content select=".start"></ng-content>
+  <h4 class="title" [class.centered]="centeredTitle">{{ title }}</h4>
+  <ng-content select=".end"></ng-content>
 </div>
