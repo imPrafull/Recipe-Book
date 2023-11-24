@@ -1,0 +1,33 @@
+.form-container {
+    background-color: var(--item-background);
+    padding: 1.25rem .75rem;
+    border-radius: .5rem;
+    box-shadow: var(--shadow);
+    -webkit-box-shadow: var(--shadow);
+    -moz-box-shadow: var(--shadow);
+    
+    .form-input {
+        margin-bottom: 1rem;
+
+        &.amount {
+            input {
+                width: auto;
+            }
+        }
+    }
+
+    .actions {
+        display: flex;
+        justify-content: flex-end;
+
+        .btn {
+            width: auto;
+            margin-right: .75rem;
+            padding: .5rem 1.25rem;
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+}

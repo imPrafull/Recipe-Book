@@ -41,6 +41,7 @@ html, body, * {
 a {
     color: var(--primary);
     text-decoration: none;
+    cursor: pointer;
 }
 
 h1 {
@@ -94,6 +95,10 @@ input, textarea {
         border-radius: .5rem;
         background-color: var(--item-background);
         padding: .8rem .75rem;
+
+        &::placeholder {
+            opacity: .7;
+        }
     
         &:focus {
             border: 1px solid var(--primary-light);
@@ -105,21 +110,26 @@ input, textarea {
     }
 } 
 
-.btn-primary {
-    background-color: var(--primary);
-    color: var(--primary-contrast);
-    width: 100%;
+.btn {
     padding: .9rem .75rem;
     font-weight: 600;
     border-radius: .5rem;
 
-    &.outline {
-        background: var(--background);
+    &.primary {
+        background-color: var(--primary);
+        color: var(--primary-contrast);
+    }
+
+    &.primary-outline {
+        background-color: var(--primary-bg);
         color: var(--primary);
         border: 1px solid var(--primary);
     }
-}
 
+    &.fill {
+        width: 100%;
+    }
+}
 
 .btn-icon {
     background: transparent;

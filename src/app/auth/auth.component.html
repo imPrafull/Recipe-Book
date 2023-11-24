@@ -4,13 +4,13 @@
   </div>
   <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
     <div class="form-input">
-      <input type="email" id="email" ngModel name="email" required email >
+      <input type="email" id="email" ngModel name="email" placeholder="Email" required email >
     </div>
     <div class="form-input">
-      <input type="password" id="password" ngModel name="password" required minlength="6" >
+      <input type="password" id="password" ngModel name="password" placeholder="Password" required minlength="6" >
     </div>
     <div class="actions">
-      <button class="btn-primary" type="submit" [disabled]="!authForm.valid" >
+      <button class="btn primary fill" type="submit" [disabled]="!authForm.valid" >
         {{ isLoginMode ? 'Login' : 'Sign Up' }}
       </button>
       <p class="sign-up">{{ isLoginMode ? "Don't have an account?" : "Already have an account?" }} <a (click)="onSwitchMode()">{{ isLoginMode ? 'Sign Up' : 'Login' }}</a></p>
