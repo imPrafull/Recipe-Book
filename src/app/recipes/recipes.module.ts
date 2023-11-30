@@ -24,7 +24,7 @@ import { RecipesComponent } from "./recipes.component";
     RouterModule,
     SharedModule,
     RecipesRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ]
 })
 

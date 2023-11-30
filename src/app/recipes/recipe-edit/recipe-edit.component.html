@@ -16,7 +16,7 @@
     </div>
 
     <div class="recipe-img">
-      <img [src]="imagePath.value" class="img-responsive" >
+      <img [src]="imagePath.value" class="img-responsive" (error)="recipeImgError($event)">
     </div>
 
     <div class="form-input">
@@ -33,7 +33,7 @@
           <input type="text" class="form-control" formControlName="name" placeholder="Name" >
         </div>
         <div class="form-input amount">
-          <input type="number" class="form-control" formControlName="amount" placeholder="Amount" >
+          <input type="number" class="form-control" formControlName="amount" >
         </div>
         <button type="button" class="btn-icon" (click)="onDeleteIngredient(i)" >
           <img src="assets/icons/trash-outline.svg" />

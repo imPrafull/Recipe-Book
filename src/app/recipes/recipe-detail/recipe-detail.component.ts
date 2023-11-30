@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { ToastService } from 'src/app/shared/toast.service';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -19,6 +21,7 @@ export class RecipeDetailComponent implements OnInit {
     private route: ActivatedRoute, 
     private router: Router,
     private location: Location,
+    private toast: ToastService,
   ) { }
 
   ngOnInit() {
@@ -33,6 +36,7 @@ export class RecipeDetailComponent implements OnInit {
 
   onAddToShoppingList() {
     this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients);
+    this.toast.show('Items Added to Shopping List!', 'success')
   }
 
   onEditRecipe() {
@@ -40,8 +44,9 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   onDeleteRecipe() {
-    this.recipeService.deleteRecipe(this.id);
-    this.router.navigate(['/recipes']);
+    this.recipeService.deleteRecipe(this.id).subscribe(() => {
+      this.router.navigate(['/recipes']);
+    })
   }
 
   back() {

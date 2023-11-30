@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../auth/auth.service';
-import { DataStorageService } from '../shared/data-storage.service';
+import { RecipeService } from './recipe.service';
 
 @Component({
   selector: 'app-recipes',
@@ -13,12 +13,14 @@ export class RecipesComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private dataStorageService: DataStorageService,
     private router: Router,
+    private recipeService: RecipeService
   ) { }
 
   ngOnInit() {
-    this.dataStorageService.fetchRecipes().subscribe();
+    if(this.recipeService.getRecipes().length < 1) {
+      this.recipeService.fetchRecipes().subscribe();
+    }
   }
 
   onShoppingList() {

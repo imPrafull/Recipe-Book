@@ -1,12 +1,12 @@
-import { Component, ComponentFactoryResolver, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
 import { AuthService, AuthResponseData } from './auth.service';
-import { AlertComponent } from '../shared/alert/alert.component';
 import { PlaceholderDirective } from '../shared/placeholder/placeholder.directive';
 import { LoaderService } from '../shared/loading-spinner/loader.service';
+import { ToastService } from '../shared/toast.service';
 
 @Component({
   selector: 'app-auth',
@@ -24,8 +24,8 @@ export class AuthComponent implements OnDestroy {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private componentFactoryResolver: ComponentFactoryResolver,
     private loaderService: LoaderService,
+    private toast: ToastService,
   ) { }
 
   onSubmit(form: NgForm) {
@@ -53,7 +53,7 @@ export class AuthComponent implements OnDestroy {
       errorMessage => {
         console.log(errorMessage);
         this.error = errorMessage;
-        this.showErrorAlert(errorMessage);
+        this.toast.show(errorMessage, 'error')
         this.loaderService.isLoading = false;
       }
     );
@@ -66,20 +66,6 @@ export class AuthComponent implements OnDestroy {
 
   onHandleAlert() {
     this.error = '';
-  }
-
-  private showErrorAlert(message: string) {
-    const alertCmpFactory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
-    const hostViewContainerRef = this.alertHost.viewContainerRef;
-    hostViewContainerRef.clear();
-
-    const componentRef = hostViewContainerRef.createComponent(alertCmpFactory);
-
-    componentRef.instance.message = message;
-    this.closeSub = componentRef.instance.close.subscribe(() => {
-      this.closeSub.unsubscribe();
-      hostViewContainerRef.clear();
-    });
   }
 
   ngOnDestroy() {

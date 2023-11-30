@@ -76,7 +76,7 @@ export class RecipeEditComponent implements OnInit {
     (this.recipeForm.get('ingredients') as FormArray).push(
       new FormGroup({
         name: new FormControl(null, Validators.required),
-        amount: new FormControl(null, [
+        amount: new FormControl(1, [
           Validators.required,
           Validators.pattern(/^[1-9]+[0-9]*$/)
         ])
@@ -86,12 +86,19 @@ export class RecipeEditComponent implements OnInit {
 
   onSubmit() {
     if (this.editMode) {
-      this.recipeService.updateRecipe(this.id, this.recipeForm.value);
+      this.recipeService.updateRecipe(this.id, this.recipeForm.value).subscribe(() => {
+        this.back();
+      })
     }
     else {
-      this.recipeService.addRecipe(this.recipeForm.value);
+      this.recipeService.addRecipe(this.recipeForm.value).subscribe(() => {
+        this.back();
+      })
     }
-    this.back();
+  }
+
+  recipeImgError(e: any) {
+    e.target.src = 'assets/images/placeholder-image.jpg'
   }
 
   back() {

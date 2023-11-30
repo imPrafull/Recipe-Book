@@ -18,6 +18,8 @@
 
     --danger: #FA2314;
 
+    --success: #37db4a;
+
     --border: #DCDCDC;
     --border-light: #F0F0F0;
 
@@ -144,6 +146,21 @@ input, textarea {
 
     &.with-header {
         height: calc(100% - 3.49rem);
+    }
+}
+
+.custom-toast {
+    background-color: var(--item-background) !important;
+    padding-left: 15px !important;
+    width: 16.5rem;
+    top: 2.49rem;
+    border: 0.0625rem solid var(--success);
+    border-left: .25rem solid var(--success);
+    border-radius: .25rem !important;
+
+    &.error {
+        border: 0.0625rem solid var(--danger);
+        border-left: .25rem solid var(--danger);
     }
 }
 

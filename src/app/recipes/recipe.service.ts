@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Subject, map, tap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+
 import { Recipe } from './recipe.model';
 import { Ingredient } from '../shared/ingredient.model';
 import { ShoppingListService } from '../shopping-list/shopping-list.service';
-import { Subject } from 'rxjs';
 
 @Injectable()
 export class RecipeService {
@@ -30,7 +32,10 @@ export class RecipeService {
   //   )
   // ];
 
-  constructor(private slService: ShoppingListService) {}
+  constructor(
+    private slService: ShoppingListService,
+    private http: HttpClient,
+  ) {}
 
   setRecipes(recipes: Recipe[]) {
     this.recipes = recipes;
@@ -52,15 +57,37 @@ export class RecipeService {
   addRecipe(recipe: Recipe) {
     this.recipes.push(recipe);
     this.recipesChanged.next(this.recipes.slice());
+    return this.storeRecipes()
   }
 
   updateRecipe(index: number, newRecipe: Recipe) {
     this.recipes[index] = newRecipe;
     this.recipesChanged.next(this.recipes.slice());
+    return this.storeRecipes()
   }
 
   deleteRecipe(index: number) {
     this.recipes.splice(index, 1);
     this.recipesChanged.next(this.recipes.slice());
+    return this.storeRecipes()
+  }
+
+  storeRecipes() {
+    return this.http.put('https://recipe-and-shopping-61dca.firebaseio.com/recipes.json', this.recipes)
+  }
+
+  fetchRecipes() {
+    return this.http.get<Recipe[]>('https://recipe-and-shopping-61dca.firebaseio.com/recipes.json')
+      .pipe(
+        map(recipes => {
+          return recipes.map(recipe => {
+            return {
+              ...recipe,
+              ingredients: recipe.ingredients ? recipe.ingredients : []
+            };
+          });
+        }),
+        tap(recipes => this.setRecipes(recipes))
+      );
   }
 }
