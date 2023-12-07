@@ -57,19 +57,19 @@ export class RecipeService {
   addRecipe(recipe: Recipe) {
     this.recipes.push(recipe);
     this.recipesChanged.next(this.recipes.slice());
-    return this.storeRecipes()
+    this.storeRecipes()
   }
 
   updateRecipe(index: number, newRecipe: Recipe) {
     this.recipes[index] = newRecipe;
     this.recipesChanged.next(this.recipes.slice());
-    return this.storeRecipes()
+    this.storeRecipes()
   }
 
   deleteRecipe(index: number) {
-    this.recipes.splice(index, 1);
+    const deletedRecipe = this.recipes.splice(index, 1);
     this.recipesChanged.next(this.recipes.slice());
-    return this.storeRecipes()
+    return deletedRecipe[0]
   }
 
   storeRecipes() {

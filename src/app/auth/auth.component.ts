@@ -36,7 +36,7 @@ export class AuthComponent implements OnDestroy {
     const password = form.value.password;
     let authObs: Observable<AuthResponseData>;
 
-    this.loaderService.isLoading = true;
+    this.loaderService.showLoader()
     if (this.isLoginMode) {
       authObs = this.authService.login(email, password);
     }
@@ -47,14 +47,14 @@ export class AuthComponent implements OnDestroy {
     authObs.subscribe(
       resData => {
         console.log(resData);
-        this.loaderService.isLoading = false;
+        this.loaderService.hideLoader()
         this.router.navigate(['/recipes']);
       },
       errorMessage => {
         console.log(errorMessage);
         this.error = errorMessage;
         this.toast.show(errorMessage, 'error')
-        this.loaderService.isLoading = false;
+        this.loaderService.hideLoader()
       }
     );
     form.reset();

@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
+import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Location } from '@angular/common';
 import { ToastService } from 'src/app/shared/toast.service';
+import { LoaderService } from 'src/app/shared/loading-spinner/loader.service';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -22,6 +23,7 @@ export class RecipeDetailComponent implements OnInit {
     private router: Router,
     private location: Location,
     private toast: ToastService,
+    private loader: LoaderService,
   ) { }
 
   ngOnInit() {
@@ -44,8 +46,14 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   onDeleteRecipe() {
-    this.recipeService.deleteRecipe(this.id).subscribe(() => {
+    this.loader.showLoader()
+    const deletedRecipe = this.recipeService.deleteRecipe(this.id)
+    this.recipeService.storeRecipes().subscribe(() => {
+      this.loader.hideLoader()
       this.router.navigate(['/recipes']);
+    }, err => {
+      this.recipeService.addRecipe(deletedRecipe)
+      this.loader.hideLoader()
     })
   }
 
