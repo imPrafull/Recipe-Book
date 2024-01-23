@@ -1,5 +1,11 @@
 <app-recipe-item *ngFor="let recipeEl of recipes; let i = index" [recipe] = "recipeEl" [index] = "i"></app-recipe-item>
 
+<div class="loading" *ngIf="loading && !recipes">
+    <app-recipe-item *ngFor="let item of [1,2,3]"></app-recipe-item>
+</div>
+
+<div class="no-recipes" *ngIf="recipes && recipes.length === 0"></div>
+
 <button class="add-recipe" (click)="onNewRecipe()">
     <img src="assets/icons/add.svg">
 </button>

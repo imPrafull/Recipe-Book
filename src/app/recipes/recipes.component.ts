@@ -18,7 +18,8 @@ export class RecipesComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if(this.recipeService.getRecipes().length < 1) {
+    const recipes = this.recipeService.getRecipes()
+    if(!recipes || recipes?.length < 1) {
       this.recipeService.fetchRecipes().subscribe();
     }
   }
