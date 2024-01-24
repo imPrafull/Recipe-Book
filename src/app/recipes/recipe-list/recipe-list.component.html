@@ -4,7 +4,14 @@
     <app-recipe-item *ngFor="let item of [1,2,3]"></app-recipe-item>
 </div>
 
-<div class="no-recipes" *ngIf="recipes && recipes.length === 0"></div>
+<div class="no-recipes" *ngIf="recipes && recipes.length === 0">
+    <img src="assets/icons/no-recipes.svg" alt="No Recipes"/>
+    <div class="detail">
+        <h4>No Recipes Found!</h4>
+        <p>Spice things up by adding your own and let's fill this space with deliciousness!</p>
+    </div>
+    <button class="btn primary" (click)="onNewRecipe()">Add Recipe</button>
+</div>
 
 <button class="add-recipe" (click)="onNewRecipe()">
     <img src="assets/icons/add.svg">
