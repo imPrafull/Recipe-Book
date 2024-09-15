@@ -3,14 +3,22 @@
     <img src="assets/images/logo.svg" alt="Recipe Book">
   </div>
   <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
-    <div class="form-input">
-      <input type="email" id="email" ngModel name="email" placeholder="Email" required email >
+    <div class="form-input" [ngClass]="{'has-error': email.invalid && (email.dirty || email.touched || authForm.submitted)}">
+      <input type="email" id="email" [(ngModel)]="user.email" name="email" placeholder="Email" required email #email="ngModel">
+      <div *ngIf="email.invalid && (email.dirty || email.touched || authForm.submitted)" class="error">
+        <p *ngIf="email.errors?.['required']">Email is required.</p>
+        <p *ngIf="email.errors?.['email']">Invalid email.</p>
+      </div>
     </div>
-    <div class="form-input">
-      <input type="password" id="password" ngModel name="password" placeholder="Password" required minlength="6" >
+    <div class="form-input" [ngClass]="{'has-error': password.invalid && (password.dirty || password.touched || authForm.submitted)}">
+      <input type="password" id="password" [(ngModel)]="user.password" name="password" placeholder="Password" required minlength="6" #password="ngModel">
+      <div *ngIf="password.invalid && (password.dirty || password.touched || authForm.submitted)" class="error">
+        <p *ngIf="password.errors?.['required']">Password is required.</p>
+        <p *ngIf="password.errors?.['minlength']">Password must be atleast 6 characters long.</p>
+      </div>
     </div>
     <div class="actions">
-      <button class="btn primary fill" type="submit" [disabled]="!authForm.valid" >
+      <button class="btn primary fill" type="submit">
         {{ isLoginMode ? 'Login' : 'Sign Up' }}
       </button>
       <p class="sign-up">{{ isLoginMode ? "Don't have an account?" : "Already have an account?" }} <a (click)="onSwitchMode()">{{ isLoginMode ? 'Sign Up' : 'Login' }}</a></p>

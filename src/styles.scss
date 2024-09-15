@@ -91,6 +91,8 @@ input, textarea {
 }
 
 .form-input {
+    position: relative;
+
     input, textarea {
         border: 1px solid var(--border);
         width: 100%;
@@ -109,6 +111,23 @@ input, textarea {
 
     textarea {
         resize: none;
+    }
+
+    &.has-error {
+        input, textarea {
+            border: 1px solid var(--danger);
+        }
+
+        .error {
+            position: absolute;
+            
+            p {
+                font-size: .75rem;
+                color: var(--danger);
+                margin-top: .25rem;
+                margin-left: .5rem;
+            }
+        }
     }
 } 
 

@@ -17,6 +17,10 @@ export class AuthComponent implements OnDestroy {
 
   isLoginMode = true;
   error: string;
+  user = {
+    email: '',
+    password: ''
+  };
   @ViewChild(PlaceholderDirective, {static: false}) alertHost: PlaceholderDirective;
 
   private closeSub: Subscription;
@@ -45,10 +49,10 @@ export class AuthComponent implements OnDestroy {
     }
 
     authObs.subscribe(
-      resData => {
-        console.log(resData);
+      async (resData) => {
         this.loaderService.hideLoader()
-        this.router.navigate(['/recipes']);
+        await this.router.navigate(['/recipes'])
+        form.reset()
       },
       errorMessage => {
         console.log(errorMessage);
@@ -57,7 +61,6 @@ export class AuthComponent implements OnDestroy {
         this.loaderService.hideLoader()
       }
     );
-    form.reset();
   }
 
   onSwitchMode() {

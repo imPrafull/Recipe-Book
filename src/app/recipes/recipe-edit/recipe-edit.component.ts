@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { NgForm, FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
@@ -11,11 +11,12 @@ import { LoaderService } from 'src/app/shared/loading-spinner/loader.service';
   templateUrl: './recipe-edit.component.html',
   styleUrls: ['./recipe-edit.component.scss']
 })
-export class RecipeEditComponent implements OnInit {
+export class RecipeEditComponent implements OnInit, OnDestroy {
 
   recipeForm: FormGroup;
   id: number;
   editMode = false;
+  isSubmitted: boolean;
 
   constructor(
     private route: ActivatedRoute, 
@@ -54,7 +55,7 @@ export class RecipeEditComponent implements OnInit {
               name: new FormControl(ingredient.name, Validators.required),
               amount: new FormControl(ingredient.amount, [
                 Validators.required,
-                Validators.pattern(/^[1-9]+[0-9]*$/)
+                // Validators.pattern(/^[1-9]+[0-9]*$/)
               ])
             })
           );
@@ -87,6 +88,10 @@ export class RecipeEditComponent implements OnInit {
   }
 
   onSubmit() {
+    this.isSubmitted = true
+    if (!this.recipeForm.valid) {
+      return;
+    }
     this.loader.showLoader()
     let recipeBackup
     if (this.editMode) {
@@ -120,6 +125,10 @@ export class RecipeEditComponent implements OnInit {
 
   onDeleteIngredient(index: number) {
     (this.recipeForm.get('ingredients') as FormArray).removeAt(index);
+  }
+
+  ngOnDestroy(): void {
+    this.isSubmitted = false
   }
 
 }

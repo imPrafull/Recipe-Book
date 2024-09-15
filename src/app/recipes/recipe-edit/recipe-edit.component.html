@@ -7,20 +7,29 @@
 </app-header>
 <div class="page-container with-header">
   <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
-    <div class="form-input">
+    <div class="form-input" [ngClass]="{'has-error': recipeForm.get('name')?.invalid && (recipeForm.get('name')?.dirty || recipeForm.get('name')?.touched || isSubmitted)}">
       <input type="text" id="name" formControlName="name" placeholder="Name" />
+      <div *ngIf="recipeForm.get('name')?.invalid && (recipeForm.get('name')?.dirty || recipeForm.get('name')?.touched || isSubmitted)" class="error">
+        <p *ngIf="recipeForm.get('name')?.hasError('required')">Name is required.</p>
+      </div>
     </div>
 
-    <div class="form-input">
+    <div class="form-input" [ngClass]="{'has-error': recipeForm.get('imagePath')?.invalid && (recipeForm.get('imagePath')?.dirty || recipeForm.get('imagePath')?.touched || isSubmitted)}">
       <input type="text" id="imagePath" formControlName="imagePath" placeholder="Image URL" #imagePath />
+      <div *ngIf="recipeForm.get('imagePath')?.invalid && (recipeForm.get('imagePath')?.dirty || recipeForm.get('imagePath')?.touched || isSubmitted)" class="error">
+        <p *ngIf="recipeForm.get('imagePath')?.hasError('required')">Image path is required.</p>
+      </div>
     </div>
 
     <div class="recipe-img">
       <img [src]="imagePath.value" class="img-responsive" (error)="recipeImgError($event)">
     </div>
 
-    <div class="form-input">
+    <div class="form-input" [ngClass]="{'has-error': recipeForm.get('description')?.invalid && (recipeForm.get('description')?.dirty || recipeForm.get('description')?.touched || isSubmitted)}">
       <textarea type="text" id="description" rows="6" formControlName="description" placeholder="Description" ></textarea>
+      <div *ngIf="recipeForm.get('description')?.invalid && (recipeForm.get('description')?.dirty || recipeForm.get('description')?.touched || isSubmitted)" class="error">
+        <p *ngIf="recipeForm.get('description')?.hasError('required')">Description is required.</p>
+      </div>
     </div>
 
     <div class="ingredients" formArrayName="ingredients">
@@ -29,10 +38,13 @@
         <button type="button" class="btn primary-outline" (click)="onAddIngredient()">Add</button>
       </div>
       <div class="ingredient" *ngFor="let ingredientCtrl of controls; let i = index" [formGroupName]="i">
-        <div class="form-input">
+        <div class="form-input" [ngClass]="{'has-error': ingredientCtrl.get('name')?.invalid && (ingredientCtrl.get('name')?.dirty || ingredientCtrl.get('name')?.touched || isSubmitted)}">
           <input type="text" class="form-control" formControlName="name" placeholder="Name" >
+          <div *ngIf="ingredientCtrl.get('name')?.invalid && (ingredientCtrl.get('name')?.dirty || ingredientCtrl.get('name')?.touched) || isSubmitted" class="error">
+            <p *ngIf="ingredientCtrl.get('name')?.hasError('required')">Name is required.</p>
+          </div>
         </div>
-        <div class="form-input amount">
+        <div class="form-input amount" [ngClass]="{'has-error': ingredientCtrl.get('amount')?.invalid && (ingredientCtrl.get('amount')?.dirty || ingredientCtrl.get('amount')?.touched || isSubmitted)}">
           <input type="number" class="form-control" formControlName="amount" >
         </div>
         <button type="button" class="btn-icon" (click)="onDeleteIngredient(i)" >
@@ -41,7 +53,7 @@
       </div>
     </div>
     <div class="actions">
-      <button type="submit" class="btn primary fill" [disabled]="!recipeForm.valid">Save</button>
+      <button type="submit" class="btn primary fill">Save</button>
     </div>
   </form>
 </div>
