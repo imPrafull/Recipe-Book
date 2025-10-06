@@ -77,9 +77,11 @@ export class RecipeService {
   }
 
   fetchRecipes() {
-    return this.http.get<Recipe[]>('https://recipe-and-shopping-61dca.firebaseio.com/recipes.json')
+    return this.http.get<Recipe[] | null>('https://recipe-and-shopping-61dca.firebaseio.com/recipes.json')
       .pipe(
         map(recipes => {
+          if (!recipes) return []
+          
           return recipes.map(recipe => {
             return {
               ...recipe,
