@@ -18,6 +18,7 @@ export class AuthComponent implements OnDestroy {
   isLoginMode = true;
   error: string;
   user = {
+    name: '',
     email: '',
     password: ''
   };
@@ -36,6 +37,7 @@ export class AuthComponent implements OnDestroy {
     if (!form.valid) {
       return;
     }
+    const name = form.value.name;
     const email = form.value.email;
     const password = form.value.password;
     let authObs: Observable<AuthResponseData>;
@@ -45,7 +47,7 @@ export class AuthComponent implements OnDestroy {
       authObs = this.authService.login(email, password);
     }
     else {
-      authObs = this.authService.signup(email, password);
+      authObs = this.authService.signup(name, email, password);
     }
 
     authObs.subscribe(

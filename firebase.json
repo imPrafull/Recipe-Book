@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "target": "default-site",
     "public": "dist/recipes-and-shopping-new",
     "ignore": [
       "firebase.json",

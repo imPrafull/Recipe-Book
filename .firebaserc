@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "recipe-and-shopping-61dca"
-  }
+  },
+  "targets": {
+    "recipe-and-shopping-61dca": {
+      "hosting": {
+        "default-site": [
+          "recipe-and-shopping-61dca"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
