@@ -39,14 +39,14 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
   private initForm() {
     let recipeName = '';
-    let recipeImagePath = '';
+    let recipeCoverImg = '';
     let recipeDescription = '';
     let recipeIngredients = new FormArray<FormGroup>([]);
 
     if (this.editMode) {
       const recipe = this.recipeService.getRecipe(this.id);
       recipeName = recipe.name;
-      recipeImagePath = recipe.imagePath;
+      recipeCoverImg = recipe.coverImg;
       recipeDescription = recipe.description;
       if (recipe['ingredients']) {
         for (let ingredient of recipe.ingredients) {
@@ -65,7 +65,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
 
     this.recipeForm = new FormGroup({
       name: new FormControl(recipeName, Validators.required),
-      imagePath: new FormControl(recipeImagePath, Validators.required),
+      coverImg: new FormControl(recipeCoverImg, Validators.required),
       description: new FormControl(recipeDescription, Validators.required),
       ingredients: recipeIngredients
     });
@@ -100,19 +100,28 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     }
     else {
       this.recipeService.addRecipe(this.recipeForm.value)
+      this.recipeService.addRecipeAPI(this.recipeForm.value).subscribe({
+        next: (res) => {
+          this.loader.hideLoader()
+          this.back();
+        },
+        error: (err) => {
+          this.recipeService.deleteRecipe(this.recipeService.getRecipes().length - 1)
+          this.loader.hideLoader()
+        }
+      })
     }
-    this.recipeService.storeRecipes().subscribe(() => {
-      this.loader.hideLoader()
-      this.back();
-    }, err => {
-      // revert add/edit action if api fails
-      if (this.editMode) {
-        this.recipeService.updateRecipe(this.id, recipeBackup!)
-      } else {
-        this.recipeService.deleteRecipe(this.recipeService.getRecipes().length - 1)
-      }
-      this.loader.hideLoader()
-    })
+    // this.recipeService.storeRecipes().subscribe(() => {
+    //   this.loader.hideLoader()
+    //   this.back();
+    // }, err => {
+    //   // revert add/edit action if api fails
+    //   if (this.editMode) {
+    //     this.recipeService.updateRecipe(this.id, recipeBackup!)
+    //   } else {
+    //   }
+    //   this.loader.hideLoader()
+    // })
   }
 
   recipeImgError(e: any) {

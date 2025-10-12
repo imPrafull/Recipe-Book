@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Recipe } from './recipe.model';
 import { Ingredient } from '../shared/ingredient.model';
 import { ShoppingListService } from '../shopping-list/shopping-list.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class RecipeService {
@@ -57,7 +58,6 @@ export class RecipeService {
   addRecipe(recipe: Recipe) {
     this.recipes ? this.recipes.push(recipe) : this.recipes = [recipe];
     this.recipesChanged.next(this.recipes.slice());
-    this.storeRecipes()
   }
 
   updateRecipe(index: number, newRecipe: Recipe) {
@@ -72,12 +72,16 @@ export class RecipeService {
     return deletedRecipe[0]
   }
 
+  addRecipeAPI(recipe: Recipe) {
+    return this.http.post<Recipe>(environment.baseUrl + '/recipes', recipe)
+  }
+
   storeRecipes() {
     return this.http.put('https://recipe-and-shopping-61dca.firebaseio.com/recipes.json', this.recipes)
   }
 
   fetchRecipes() {
-    return this.http.get<Recipe[] | null>('https://recipe-and-shopping-61dca.firebaseio.com/recipes.json')
+    return this.http.get<Recipe[] | null>(environment.baseUrl + '/recipes?sortBy=createdAt:asc')
       .pipe(
         map(recipes => {
           if (!recipes) return []
@@ -92,4 +96,9 @@ export class RecipeService {
         tap(recipes => this.setRecipes(recipes))
       );
   }
+
+  fetchRecipe(recipeId: string) {
+    return this.http.get<Recipe>(environment.baseUrl + '/recipes/' + recipeId)
+  }
+  
 }

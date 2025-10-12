@@ -1,5 +1,5 @@
 <a class="item" [routerLink]="[index]" routerLinkActive="active" *ngIf="recipe">
-    <img class="item-image" [src]="recipe.imagePath" alt="{{ recipe.name }}">
+    <img class="item-image" [src]="recipe.coverImg" alt="{{ recipe.name }}">
     <div class="item-detail">
         <h5 class="item-heading">{{ recipe.name }}</h5>
         <p class="item-text">{{ recipe.description }}</p>
