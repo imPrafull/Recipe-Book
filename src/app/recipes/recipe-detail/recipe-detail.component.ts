@@ -13,9 +13,8 @@ import { LoaderService } from 'src/app/shared/loading-spinner/loader.service';
   styleUrls: ['./recipe-detail.component.scss']
 })
 export class RecipeDetailComponent implements OnInit {
-
   recipe: Recipe;
-  id: number;
+  id: string;
 
   constructor(
     private recipeService: RecipeService, 
@@ -27,13 +26,21 @@ export class RecipeDetailComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.route.params
-      .subscribe(
-        (params: Params) => {
-          this.id = +params['id'];
-          this.recipe = this.recipeService.getRecipe(this.id);
-        }
-      );
+    const recipeId = this.route.snapshot.params['id'];
+    this.id = recipeId;
+    this.loader.showLoader();
+    
+    this.recipeService.fetchRecipe(recipeId).subscribe({
+      next: (recipe) => {
+        this.recipe = recipe;
+        this.loader.hideLoader();
+      },
+      error: (error) => {
+        this.loader.hideLoader();
+        this.toast.show('Error loading recipe', 'error');
+        this.router.navigate(['/recipes']);
+      }
+    });
   }
 
   onAddToShoppingList() {
@@ -48,13 +55,15 @@ export class RecipeDetailComponent implements OnInit {
   onDeleteRecipe() {
     this.loader.showLoader()
     const deletedRecipe = this.recipeService.deleteRecipe(this.id)
-    this.recipeService.storeRecipes().subscribe(() => {
+    this.recipeService.deleteRecipeAPI(this.id).subscribe({
+      next: () => {
       this.loader.hideLoader()
       this.router.navigate(['/recipes']);
-    }, err => {
-      this.recipeService.addRecipe(deletedRecipe)
+    },
+    error: err => {
+      if (deletedRecipe) this.recipeService.addRecipe(deletedRecipe)
       this.loader.hideLoader()
-    })
+    }})
   }
 
   back() {

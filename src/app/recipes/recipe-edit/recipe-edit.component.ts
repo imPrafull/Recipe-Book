@@ -5,6 +5,7 @@ import { Location } from '@angular/common';
 
 import { RecipeService } from '../recipe.service';
 import { LoaderService } from 'src/app/shared/loading-spinner/loader.service';
+import { Recipe } from '../recipe.model';
 
 @Component({
   selector: 'app-recipe-edit',
@@ -14,7 +15,7 @@ import { LoaderService } from 'src/app/shared/loading-spinner/loader.service';
 export class RecipeEditComponent implements OnInit, OnDestroy {
 
   recipeForm: FormGroup;
-  id: number;
+  id: string;
   editMode = false;
   isSubmitted: boolean;
 
@@ -27,48 +28,47 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.route.params
-      .subscribe(
-        (params: Params) => {
-          this.id = +params['id'];
-          this.editMode = params['id'] != null;
-          this.initForm();
-        }
-      );
+    const params = this.route.snapshot.params;
+    this.id = params['id'];
+    this.editMode = params['id'] != null;
+    this.initForm();
   }
 
   private initForm() {
-    let recipeName = '';
-    let recipeCoverImg = '';
-    let recipeDescription = '';
-    let recipeIngredients = new FormArray<FormGroup>([]);
-
-    if (this.editMode) {
-      const recipe = this.recipeService.getRecipe(this.id);
-      recipeName = recipe.name;
-      recipeCoverImg = recipe.coverImg;
-      recipeDescription = recipe.description;
-      if (recipe['ingredients']) {
-        for (let ingredient of recipe.ingredients) {
-          recipeIngredients.push(
-            new FormGroup({
-              name: new FormControl(ingredient.name, Validators.required),
-              amount: new FormControl(ingredient.amount, [
-                Validators.required,
-                // Validators.pattern(/^[1-9]+[0-9]*$/)
-              ])
-            })
-          );
-        }
-      }
-    }
-
     this.recipeForm = new FormGroup({
-      name: new FormControl(recipeName, Validators.required),
-      coverImg: new FormControl(recipeCoverImg, Validators.required),
-      description: new FormControl(recipeDescription, Validators.required),
-      ingredients: recipeIngredients
+      name: new FormControl('', Validators.required),
+      coverImg: new FormControl('', Validators.required),
+      description: new FormControl('', Validators.required),
+      ingredients: new FormArray<FormGroup>([])
     });
+    
+    // If we're editing, fetch recipe and patch form values
+    if (this.editMode) {
+      this.recipeService.fetchRecipe(this.id).subscribe(recipe => {
+        this.recipeForm.patchValue({
+          name: recipe.name,
+          coverImg: recipe.coverImg,
+          description: recipe.description
+        });
+
+        const ingredientsArray = this.recipeForm.get('ingredients') as FormArray;
+        ingredientsArray.clear(); // clear any default controls
+
+        if (recipe.ingredients) {
+          for (let ingredient of recipe.ingredients) {
+            ingredientsArray.push(
+              new FormGroup({
+                name: new FormControl(ingredient.name, Validators.required),
+                amount: new FormControl(ingredient.amount, [
+                  Validators.required,
+                  // Validators.pattern(/^[1-9]+[0-9]*$/)
+                ])
+              })
+            );
+          }
+        }
+      });
+    }
   }
 
   get controls() {
@@ -93,35 +93,42 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
       return;
     }
     this.loader.showLoader()
-    let recipeBackup
+    let recipeBackup: Recipe | undefined;
     if (this.editMode) {
-      recipeBackup = this.recipeService.getRecipe(this.id)
+      recipeBackup = this.recipeService.getLocalRecipe(this.id)
       this.recipeService.updateRecipe(this.id, this.recipeForm.value)
-    }
-    else {
-      this.recipeService.addRecipe(this.recipeForm.value)
-      this.recipeService.addRecipeAPI(this.recipeForm.value).subscribe({
+      this.recipeService.updateRecipeAPI(this.id, this.recipeForm.value).subscribe({
         next: (res) => {
           this.loader.hideLoader()
           this.back();
         },
         error: (err) => {
-          this.recipeService.deleteRecipe(this.recipeService.getRecipes().length - 1)
+          if (this.editMode && recipeBackup) {
+            this.recipeService.updateRecipe(this.id, recipeBackup)
+          }
+          this.loader.hideLoader()
+        }
+      })
+    } else {
+      const tempId = Date.now().toString()
+      const newRecipe = { ...this.recipeForm.value, id: tempId };
+
+      // Add locally with temporary ID
+      this.recipeService.addRecipe(newRecipe);
+
+      this.recipeService.addRecipeAPI(this.recipeForm.value).subscribe({
+        next: (res) => {
+          // Replace temp ID with the one from the server
+          this.recipeService.updateRecipe(tempId, res);
+          this.loader.hideLoader()
+          this.back();
+        },
+        error: (err) => {
+          this.recipeService.deleteRecipe(tempId)
           this.loader.hideLoader()
         }
       })
     }
-    // this.recipeService.storeRecipes().subscribe(() => {
-    //   this.loader.hideLoader()
-    //   this.back();
-    // }, err => {
-    //   // revert add/edit action if api fails
-    //   if (this.editMode) {
-    //     this.recipeService.updateRecipe(this.id, recipeBackup!)
-    //   } else {
-    //   }
-    //   this.loader.hideLoader()
-    // })
   }
 
   recipeImgError(e: any) {

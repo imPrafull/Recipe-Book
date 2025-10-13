@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject, map, tap } from 'rxjs';
+import { Subject, map, of, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 import { Recipe } from './recipe.model';
@@ -16,7 +16,7 @@ export class RecipeService {
   //   new Recipe(
   //     'Tasty Schnitzel',
   //     'A super-tasty schnitzel - just awesome!',
-  //     'https://upload.wikimedia.org/wikipedia/commons/7/72/Schnitzel.JPG',
+  //     'https://upload.wikimedia.org/wikipedia/commons/7/72/Schnitzel.jpg',
   //     [
   //       new Ingredient('Meat', 1),
   //       new Ingredient('French Fries', 20)
@@ -47,8 +47,8 @@ export class RecipeService {
     return this.recipes?.slice();
   }
 
-  getRecipe(index: number) {
-    return this.recipes[index];
+  getLocalRecipe(recipeId: string) {
+    return this.recipes?.find(recipe => recipe.id === recipeId)
   }
 
   addIngredientsToShoppingList(ingredients: Ingredient[]) {
@@ -60,20 +60,36 @@ export class RecipeService {
     this.recipesChanged.next(this.recipes.slice());
   }
 
-  updateRecipe(index: number, newRecipe: Recipe) {
-    this.recipes[index] = newRecipe;
-    this.recipesChanged.next(this.recipes.slice());
-    this.storeRecipes()
+  updateRecipe(id: string, newRecipe: Recipe) {
+    if (!this.recipes) return;
+
+    const index = this.recipes.findIndex(recipe => recipe.id === id);
+    if (index !== -1) {
+      const oldRecipe = this.recipes[index]
+      this.recipes[index] = { ...oldRecipe, ...newRecipe };
+      this.recipesChanged.next(this.recipes.slice());
+      this.storeRecipes();
+    }
   }
 
-  deleteRecipe(index: number) {
-    const deletedRecipe = this.recipes.splice(index, 1);
-    this.recipesChanged.next(this.recipes.slice());
-    return deletedRecipe[0]
+  deleteRecipe(id: string) {
+    if (!this.recipes) return null;
+
+    const index = this.recipes.findIndex(recipe => recipe.id === id);
+    if (index !== -1) {
+      const deletedRecipe = this.recipes.splice(index, 1);
+      this.recipesChanged.next(this.recipes.slice());
+      return deletedRecipe[0];
+    }
+    return null;
   }
 
   addRecipeAPI(recipe: Recipe) {
     return this.http.post<Recipe>(environment.baseUrl + '/recipes', recipe)
+  }
+
+  updateRecipeAPI(id: string, recipe: Recipe) {
+    return this.http.patch<Recipe>(environment.baseUrl + '/recipes/' + id, recipe)
   }
 
   storeRecipes() {
@@ -98,7 +114,18 @@ export class RecipeService {
   }
 
   fetchRecipe(recipeId: string) {
-    return this.http.get<Recipe>(environment.baseUrl + '/recipes/' + recipeId)
+    // First check if we have the recipe locally
+    const localRecipe = this.getLocalRecipe(recipeId);
+    if (localRecipe) {
+      // If found locally, return it as an Observable
+      return of(localRecipe);
+    }
+    // If not found locally, fetch from API
+    return this.http.get<Recipe>(environment.baseUrl + '/recipes/' + recipeId);
   }
-  
+
+  deleteRecipeAPI(recipeId: string) {
+    return this.http.delete<Recipe>(environment.baseUrl + '/recipes/' + recipeId)
+  }
+
 }
