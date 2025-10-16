@@ -3,6 +3,13 @@
     <img src="assets/images/logo.svg" alt="Recipe Book">
   </div>
   <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
+    <div class="form-input" *ngIf="!this.isLoginMode" [ngClass]="{'has-error': name.invalid && (name.dirty || name.touched || authForm.submitted)}">
+      <input id="name" [(ngModel)]="user.name" name="name" placeholder="Name" required #name="ngModel">
+      <div *ngIf="name.invalid && (name.dirty || name.touched || authForm.submitted)" class="error">
+        <p *ngIf="name.errors?.['required']">Name is required.</p>
+        <p *ngIf="name.errors?.['name']">Invalid name.</p>
+      </div>
+    </div>
     <div class="form-input" [ngClass]="{'has-error': email.invalid && (email.dirty || email.touched || authForm.submitted)}">
       <input type="email" id="email" [(ngModel)]="user.email" name="email" placeholder="Email" required email #email="ngModel">
       <div *ngIf="email.invalid && (email.dirty || email.touched || authForm.submitted)" class="error">

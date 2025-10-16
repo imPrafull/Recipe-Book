@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="recipe">
     <div class="item-img-container">
         <div class="btns">
             <button class="btn" (click)="back()">
@@ -8,7 +8,7 @@
                 <img src="assets/icons/shopping-cart.svg">
             </button>
         </div>
-        <img [src]="recipe.imagePath" alt="{{ recipe.name }}" class="item-img">
+        <img [src]="recipe.coverImg" alt="{{ recipe.name }}" class="item-img">
     </div>
     <section class="item-details">
         <section class="item-section">

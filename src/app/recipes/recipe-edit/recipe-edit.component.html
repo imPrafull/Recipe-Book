@@ -14,15 +14,15 @@
       </div>
     </div>
 
-    <div class="form-input" [ngClass]="{'has-error': recipeForm.get('imagePath')?.invalid && (recipeForm.get('imagePath')?.dirty || recipeForm.get('imagePath')?.touched || isSubmitted)}">
-      <input type="text" id="imagePath" formControlName="imagePath" placeholder="Image URL" #imagePath />
-      <div *ngIf="recipeForm.get('imagePath')?.invalid && (recipeForm.get('imagePath')?.dirty || recipeForm.get('imagePath')?.touched || isSubmitted)" class="error">
-        <p *ngIf="recipeForm.get('imagePath')?.hasError('required')">Image path is required.</p>
+    <div class="form-input" [ngClass]="{'has-error': recipeForm.get('coverImg')?.invalid && (recipeForm.get('coverImg')?.dirty || recipeForm.get('coverImg')?.touched || isSubmitted)}">
+      <input type="text" id="coverImg" formControlName="coverImg" placeholder="Image URL" #coverImg />
+      <div *ngIf="recipeForm.get('coverImg')?.invalid && (recipeForm.get('coverImg')?.dirty || recipeForm.get('coverImg')?.touched || isSubmitted)" class="error">
+        <p *ngIf="recipeForm.get('coverImg')?.hasError('required')">Image path is required.</p>
       </div>
     </div>
 
     <div class="recipe-img">
-      <img [src]="imagePath.value" class="img-responsive" (error)="recipeImgError($event)">
+      <img [src]="coverImg.value" class="img-responsive" (error)="recipeImgError($event)">
     </div>
 
     <div class="form-input" [ngClass]="{'has-error': recipeForm.get('description')?.invalid && (recipeForm.get('description')?.dirty || recipeForm.get('description')?.touched || isSubmitted)}">
