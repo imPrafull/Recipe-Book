@@ -68,7 +68,6 @@ export class RecipeService {
       const oldRecipe = this.recipes[index]
       this.recipes[index] = { ...oldRecipe, ...newRecipe };
       this.recipesChanged.next(this.recipes.slice());
-      this.storeRecipes();
     }
   }
 
@@ -90,10 +89,6 @@ export class RecipeService {
 
   updateRecipeAPI(id: string, recipe: Recipe) {
     return this.http.patch<Recipe>(environment.baseUrl + '/recipes/' + id, recipe)
-  }
-
-  storeRecipes() {
-    return this.http.put('https://recipe-and-shopping-61dca.firebaseio.com/recipes.json', this.recipes)
   }
 
   fetchRecipes() {
