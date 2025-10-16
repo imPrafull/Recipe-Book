@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  baseUrl: 'https://prafulls-blog-api.onrender.com',
+  baseUrl: 'https://recipe-book-api-cb7q.onrender.com',
 };
