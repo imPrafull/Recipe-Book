@@ -83,12 +83,12 @@ export class RecipeService {
     return null;
   }
 
-  addRecipeAPI(recipe: Recipe) {
-    return this.http.post<Recipe>(environment.baseUrl + '/recipes', recipe)
+  addRecipeAPI(recipeFormData: FormData) {
+    return this.http.post<Recipe>(environment.baseUrl + '/recipes', recipeFormData)
   }
 
-  updateRecipeAPI(id: string, recipe: Recipe) {
-    return this.http.patch<Recipe>(environment.baseUrl + '/recipes/' + id, recipe)
+  updateRecipeAPI(id: string, recipeFormData: FormData) {
+    return this.http.patch<Recipe>(environment.baseUrl + '/recipes/' + id, recipeFormData)
   }
 
   fetchRecipes() {

@@ -14,16 +14,40 @@
       </div>
     </div>
 
-    <div class="form-input" [ngClass]="{'has-error': recipeForm.get('coverImg')?.invalid && (recipeForm.get('coverImg')?.dirty || recipeForm.get('coverImg')?.touched || isSubmitted)}">
-      <input type="text" id="coverImg" formControlName="coverImg" placeholder="Image URL" #coverImg />
-      <div *ngIf="recipeForm.get('coverImg')?.invalid && (recipeForm.get('coverImg')?.dirty || recipeForm.get('coverImg')?.touched || isSubmitted)" class="error">
-        <p *ngIf="recipeForm.get('coverImg')?.hasError('required')">Image path is required.</p>
+    <div
+      class="image-upload"
+      [ngClass]="{
+        'dragover': isDragOver,
+        'has-error': !fileSelected && (recipeForm.get('coverImg')?.touched || isSubmitted) && !editMode
+      }"
+      (drop)="onDrop($event)"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+    >
+      <ng-container *ngIf="!previewUrl; else imagePreview">
+        <input type="file" id="coverImg" accept="image/*" (change)="onFileSelected($event)" hidden />
+        <label for="coverImg" class="upload-label">
+          <img src="assets/icons/upload-cloud.svg" alt="Upload icon" />
+          <p>Drag & drop an image here, or <span class="upload-link">browse</span></p>
+        </label>
+      </ng-container>
+
+      <ng-template #imagePreview>
+        <div class="image-preview">
+          <img [src]="previewUrl" alt="Recipe image" (error)="recipeImgError($event)" />
+          <div class="actions">
+            <button type="button" class="btn primary" (click)="removeImage()">Remove</button>
+            <label for="coverImg" class="btn primary-outline">Update</label>
+            <input type="file" id="coverImg" accept="image/*" (change)="onFileSelected($event)" hidden />
+          </div>
+        </div>
+      </ng-template>
+
+      <div *ngIf="!fileSelected && (recipeForm.get('coverImg')?.touched || isSubmitted) && !editMode" class="image-error">
+        <p>Image is required.</p>
       </div>
     </div>
 
-    <div class="recipe-img">
-      <img [src]="coverImg.value" class="img-responsive" (error)="recipeImgError($event)">
-    </div>
 
     <div class="form-input" [ngClass]="{'has-error': recipeForm.get('description')?.invalid && (recipeForm.get('description')?.dirty || recipeForm.get('description')?.touched || isSubmitted)}">
       <textarea type="text" id="description" rows="6" formControlName="description" placeholder="Description" ></textarea>
