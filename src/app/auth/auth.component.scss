@@ -20,6 +20,17 @@
 
         .form-input {
             margin-bottom: 1.5rem;
+
+            .password-wrapper {
+                position: relative;
+
+                .password-toggle {
+                    position: absolute;
+                    right: .8rem;
+                    top: 30%;
+                    cursor: pointer;
+                }
+            }
         }
 
         .actions {

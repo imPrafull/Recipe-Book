@@ -18,7 +18,12 @@
       </div>
     </div>
     <div class="form-input" [ngClass]="{'has-error': password.invalid && (password.dirty || password.touched || authForm.submitted)}">
-      <input type="password" id="password" [(ngModel)]="user.password" name="password" placeholder="Password" required minlength="6" #password="ngModel">
+      <div class="password-wrapper">
+        <input [type]="showPassword ? 'text' : 'password'" id="password" [(ngModel)]="user.password" name="password" placeholder="Password" required minlength="6" #password="ngModel">
+        <span class="password-toggle" (click)="togglePasswordVisibility()">
+          <img [src]="showPassword ? 'assets/icons/eye.svg' : 'assets/icons/eye-off.svg'">
+        </span>
+      </div>
       <div *ngIf="password.invalid && (password.dirty || password.touched || authForm.submitted)" class="error">
         <p *ngIf="password.errors?.['required']">Password is required.</p>
         <p *ngIf="password.errors?.['minlength']">Password must be atleast 6 characters long.</p>

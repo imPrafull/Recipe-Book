@@ -22,6 +22,7 @@ export class AuthComponent implements OnDestroy {
     email: '',
     password: ''
   };
+  showPassword = false;
   @ViewChild(PlaceholderDirective, {static: false}) alertHost: PlaceholderDirective;
 
   private closeSub: Subscription;
@@ -67,6 +68,10 @@ export class AuthComponent implements OnDestroy {
 
   onSwitchMode() {
     this.isLoginMode = !this.isLoginMode;
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 
   onHandleAlert() {
