@@ -21,14 +21,25 @@
         .form-input {
             margin-bottom: 1.5rem;
 
+            input::-ms-reveal {
+                display: none;
+            }
+
             .password-wrapper {
                 position: relative;
 
                 .password-toggle {
                     position: absolute;
-                    right: .8rem;
+                    right: 0.8rem;
                     top: 30%;
                     cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    height: 1rem;
+
+                    img {
+                        height: 100%;
+                    }
                 }
             }
         }
